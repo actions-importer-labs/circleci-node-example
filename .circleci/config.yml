@@ -1,0 +1,26 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@3.1.1
+  node: circleci/node@4.7.0
+
+jobs:
+  setup:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
+    environment:
+      COVERAGE_DIR: "./tmp/cov"
+    steps:
+      - run: mkdir -p $COVERAGE_DIR
+
+workflows:
+  sample:
+    jobs:
+      - setup
+      - node/test:
+          version: '16.10'
+          pkg-manager: npm
+          post-steps:
+            - codecov/upload
+            
